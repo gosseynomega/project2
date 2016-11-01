@@ -1,0 +1,48 @@
+cls
+#insert dans le fihcier de log la date de debut
+$datedebut=Get-Date -Format o
+echo "debut $datedebut" >>log.log
+
+$liste=get-vm |select Name
+
+foreach ($VMName in $liste.name) {
+    #boucle dans hyperv
+    $a1 = Get-Date
+    stop-vm $VMName
+    #Write-Host $VMName a1                           #debug
+
+    foreach ($CheminToVHD in Get-VMHardDiskDrive -VMName $VMName |select-Object Path) {
+        #boucle dans machine
+        #Write-Host $CheminToVHD.path from $VMName a2             #debug
+        
+        #mesure de la taille du vhd
+        $file = Get-Item $CheminToVHD.path
+        $taillebefore = $file.length/1GB
+            
+        Optimize-VHD –Path $CheminToVHD.path –Mode Full
+        #Optimize-VHD –Path $CheminToVHD.path –Mode Pretrimmed
+        
+        #mesure de la taille du vhd
+        $file = Get-Item $CheminToVHD.path
+        $tailleafter = $file.length/1GB
+        
+        #calcul du gain
+        $gain=$taillebefore-$tailleafter
+            
+        $a2 = Get-Date
+        
+        #calcul de la différance entre le debut et la fin et met le resultat dans le fichier de log
+        $T=((Get-Date $a2) - (Get-Date $a1)).tostring()
+        echo "la vm $VMName a reduit de $gain Go et cela a prit $T"  >>log.log
+
+        }
+    start-vm $VMName
+}
+
+
+#insert dans le fichier de log la datede fin
+$datefin=Get-Date -Format o
+echo "fin $datefin" >>log.log
+
+stop-vm POSTE000
+stop-vm poste_w10

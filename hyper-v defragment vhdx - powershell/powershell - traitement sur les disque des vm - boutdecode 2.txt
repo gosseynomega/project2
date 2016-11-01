@@ -1,0 +1,16 @@
+cls
+#recupere les chemin d'une vm
+#Get-VMHardDiskDrive -VMName poste_w10 |ft Path
+
+$liste=get-vm |select Name
+#$liste.Name
+
+#Get-VMHardDiskDrive -VMName $MVname |ft Path
+
+foreach ($MVname in $liste.name) {
+    Write-Host $MVname a1 machine
+    #Get-VMHardDiskDrive -VMName $MVname |select-Object Path
+    foreach ($CheminToVHD in Get-VMHardDiskDrive -VMName $MVname |select-Object Path) {
+        Write-Host $CheminToVHD.path
+    }
+}
