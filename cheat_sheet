@@ -1,0 +1,32 @@
+Présentation
+
+
+Instalation
+
+
+Exemple d'utilisation
+
+crée un repository
+mkdir git
+cd git
+
+# ajout du dossier courent a l'index de GIT
+git init
+# git init permet de spécifier a git que le répertoire courent est un repository
+
+#crée un dossier et y mettre quelques fichier dedans
+mkdir "hyper-v defragment vhdx - powershell"
+cd "hyper-v defragment vhdx - powershell"
+touch prog1
+touch prog2
+ 
+
+#pour ajourer un fichier/dossier a git
+git add "hyper-v defragment vhdx - powershell"
+
+fair un commit après une modifications de fichier
+git commit -m ""
+option -m permet de spécifier un message pour le commit
+annexe??
+
+Staging = index
